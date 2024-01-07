@@ -44,3 +44,4 @@ document.getElementById('escape').onclick = function(){
 document.getElementById('mine').onclick = function(){
     socket.emit('mine')
 }
+socket.on('image',(e)=>function(e){image.src  = e})

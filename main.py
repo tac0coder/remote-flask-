@@ -6,19 +6,16 @@ import os
 import cv2
 import pyautogui
 import pydirectinput,math
-
+import base64
 import numpy as np
 app = Flask(__name__)
 socketio = SocketIO(app)
 mine = False
-print('hi')
+#data:image/jpg;base64, [bytearray]
 
 directions = {'w':False,'a':False,'d':False,'s':False,' ':False}
 
-@app.route('/screencapture')
-def src():
-    return Response(getScreen(),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
+
 
 def getScreen():
     while True:
@@ -31,10 +28,11 @@ def getScreen():
         im = PIL.Image.merge('RGB', (r, g, b))
         im = np.asarray(im)
         
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + cv2.imencode('.jpg',im)[1].tobytes() + b'\r\n')
+        socketio.emit('image',b'data:image/jpg;base64, ' + cv2.imencode('.jpg',im)[1].tobytes())
 
-
+@socketio.on('connection')
+def connection():
+    getScreen()
 @app.route('/')
 def index():
     return render_template('index.html')
