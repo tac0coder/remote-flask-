@@ -6,33 +6,34 @@ import os
 import cv2
 import pyautogui
 import pydirectinput,math
-import base64
+import base64,time
+from multiprocessing import Process
 import numpy as np
 app = Flask(__name__)
-socketio = SocketIO(app)
+socketio = SocketIO(app,logger=True)
 mine = False
 #data:image/jpg;base64, [bytearray]
 
 directions = {'w':False,'a':False,'d':False,'s':False,' ':False}
 
 
-
+@socketio.on('getscreen')
 def getScreen():
-    while True:
-        im=PIL.ImageGrab.grab()
-        r, g, b = im.split()
-        tempb = b
-        tempr = r
-        b = tempr
-        r = tempb
-        im = PIL.Image.merge('RGB', (r, g, b))
-        im = np.asarray(im)
-        
-        socketio.emit('image',b'data:image/jpg;base64, ' + cv2.imencode('.jpg',im)[1].tobytes())
+    global socketio
 
-@socketio.on('connection')
-def connection():
-    getScreen()
+    im=PIL.ImageGrab.grab()
+    r, g, b = im.split()
+    tempb = b
+    tempr = r
+    b = tempr
+    r = tempb
+    im = PIL.Image.merge('RGB', (r, g, b))
+    im = np.asarray(im)
+    #with open('test.txt','w') as a:
+     #   a.write(str(base64.b64encode(cv2.imencode('.jpg',im)[1].tobytes()))[2:-1])
+    socketio.emit('image',str(base64.b64encode(cv2.imencode('.jpg',im)[1].tobytes()))[2:-1])
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -84,7 +85,8 @@ def move(direction):
         pydirectinput.keyDown(direction)
     else: 
         pydirectinput.keyUp(direction)
-        
+
 if __name__ == "__main__":
     socketio.run(app,host='0.0.0.0')
+    
     

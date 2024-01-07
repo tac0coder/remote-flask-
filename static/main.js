@@ -1,9 +1,12 @@
 socket = io();
-
 directions = {'w':false,'a':false,'s':false,'d':false,' ':false}
 
 image = document.getElementById('image')
 scale = 1920/image.width
+
+setInterval(function(){socket.emit('getscreen')},300)
+socket.on('test',b=>{image.src="data:image/jpg;base64,"+b;})
+
 document.getElementById('up').onclick =function(){
     socket.emit('scroll',3)
 }
@@ -44,4 +47,4 @@ document.getElementById('escape').onclick = function(){
 document.getElementById('mine').onclick = function(){
     socket.emit('mine')
 }
-socket.on('image',(e)=>function(e){image.src  = e})
+
