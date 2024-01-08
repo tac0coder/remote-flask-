@@ -6,7 +6,7 @@ import os
 import cv2
 import pyautogui
 import pydirectinput,math
-import base64,time
+import base64
 from multiprocessing import Process
 import numpy as np
 app = Flask(__name__)
@@ -28,9 +28,10 @@ def getScreen():
     b = tempr
     r = tempb
     im = PIL.Image.merge('RGB', (r, g, b))
+    im = im.resize((int(im.size[0]/2),int(im.size[1]/2)),PIL.Image.Resampling.LANCZOS)
     im = np.asarray(im)
-    #with open('test.txt','w') as a:
-     #   a.write(str(base64.b64encode(cv2.imencode('.jpg',im)[1].tobytes()))[2:-1])
+    #with open('large.txt','w') as s:
+        #s.write(str(base64.b64encode(cv2.imencode('.jpg',im)[1].tobytes()))[2:-1])
     socketio.emit('image',str(base64.b64encode(cv2.imencode('.jpg',im)[1].tobytes()))[2:-1])
 
 
