@@ -1,0 +1,37 @@
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebRTC webcam</title>
+    <style>
+
+
+    video {
+        width: 75%;
+        height: 75%;
+    }
+
+    </style>
+</head>
+<body>
+
+<div class="option">
+    <input id="use-stun" type="checkbox"/>
+    <label for="use-stun">Use STUN server</label>
+</div>
+<button id="start" onclick="start()">Start</button>
+<button id="stop" style="display: none" onclick="stop()">Stop</button>
+
+<div id="media">
+    <h2>Media</h2>
+    <image id="image"></image><video id="video" autoplay="true" playsinline="true"></video>
+</div>
+<label for="mine">Hold left click</label>
+    <input type="checkbox" id="mine" name="mine">
+    <label for="esc">Escape</label>
+    <button id="escape" name="esc"></button>
+    <button id="up" name="up" type="button">Scroll Up</button>
+    <button id="down" name="down" type="button">Scroll Down</button>
+<script src="client.js"></script>
+</body>
+</html>
